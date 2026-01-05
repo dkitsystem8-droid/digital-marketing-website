@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop"; // Import ScrollToTop component
 
 // SERVICE PAGES
-import SEO from "./pages/Seo";
+import SEO from "./pages/SearchEngine";
 import SocialMedia from "./pages/SocialMedia";
 import GoogleAds from "./pages/GoogleAds";
 import WebDev from "./pages/WebDev";
