@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop"; // Import ScrollToTop component
 
 // SERVICE PAGES
-import SEO from "./pages/SearchEngine";
+import SearchEngine from "./pages/SearchEngine"; // ✅ Updated import
 import SocialMedia from "./pages/SocialMedia";
 import GoogleAds from "./pages/GoogleAds";
 import WebDev from "./pages/WebDev";
@@ -41,7 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          <Route path="/seo" element={<SEO />} />
+          <Route path="/seo" element={<SearchEngine />} /> {/* ✅ Updated usage */}
           <Route path="/social-media" element={<SocialMedia />} />
           <Route path="/google-ads" element={<GoogleAds />} />
           <Route path="/web-development" element={<WebDev />} />
