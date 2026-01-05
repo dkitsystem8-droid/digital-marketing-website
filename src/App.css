@@ -1,0 +1,30 @@
+/* ===== GLOBAL RESET & HORIZONTAL SCROLL FIX ===== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important; /* 🔥 MAIN FIX */
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* 🔥 React Slick overflow fix */
+.slick-slider,
+.slick-list,
+.slick-track {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
