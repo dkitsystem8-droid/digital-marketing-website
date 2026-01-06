@@ -1,96 +1,87 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const trendsSlides = [
-  { title: "AI-Powered Personalization and UX", text: "Websites are leveraging AI to offer hyper-personalized experiences in real-time." },
+  { title: "AI-Powered Personalization", text: "Websites use AI to offer hyper-personalized experiences in real-time." },
   { title: "Mobile-First Development", text: "Dedicated mobile layouts with thumb-friendly navigation are essential." },
-  { title: "Voice Search Optimization (VSO)", text: "Optimize content for conversational voice queries." },
-  { title: "Progressive Web Apps (PWAs)", text: "PWAs offer app-like experiences with offline support." },
-  { title: "Headless CMS & API-First Architecture", text: "Backend and frontend separation improves scalability." },
-  { title: "Website Performance & Core Web Vitals", text: "Websites must load under 3 seconds." },
-  { title: "Cybersecurity & Data Privacy", text: "HTTPS and privacy compliance build trust." },
-  { title: "Interactive & Immersive Elements", text: "Micro-interactions and AR/VR improve engagement." },
+  { title: "Voice Search Optimization", text: "Optimize content for conversational voice queries." },
+  { title: "Progressive Web Apps", text: "PWAs offer app-like experiences with offline support." },
+  { title: "Headless CMS", text: "Backend and frontend separation improves scalability." },
+  { title: "Performance & Core Web Vitals", text: "Websites must load under 3 seconds." },
+  { title: "Cybersecurity & Privacy", text: "HTTPS and privacy compliance build trust." },
+  { title: "Interactive Elements", text: "Micro-interactions and AR/VR improve engagement." },
+];
+
+const circleColors = [
+  "#f87171", "#fb923c", "#facc15", "#4ade80", 
+  "#22d3ee", "#60a5fa", "#a78bfa", "#f472b6"
 ];
 
 export default function WebDevTrendsCarousel() {
-  const navigate = useNavigate(); // ✅ useNavigate hook
-  const [nav1, setNav1] = useState(null);
-  const [nav2, setNav2] = useState(null);
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [zoomedIndex, setZoomedIndex] = useState(null);
+  const sliderMain = useRef(null);
 
-  const slider1 = useRef(null);
-  const slider2 = useRef(null);
+  const [angle, setAngle] = useState(0);
 
   useEffect(() => {
-    setNav1(slider1.current);
-    setNav2(slider2.current);
+    const resize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", resize);
 
-    const onResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    const interval = setInterval(() => setAngle(prev => (prev + 0.5) % 360), 30);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      clearInterval(interval);
+    };
   }, []);
 
-  const trendsSettings = {
-    dots: true,
+  const mainSettings = {
+    dots: false,
     infinite: true,
-    speed: 700,
+    speed: 600,
     slidesToShow: 1,
-    arrows: !isMobile,
     fade: true,
-    asNavFor: nav2,
-    ref: slider1,
-    appendDots: dots => (
-      <ul style={{ display: "flex", justifyContent: "center", marginTop: "20px", padding: 0 }}>
-        {dots.map((dot, i) => (
-          <li key={i} style={{ listStyle: "none", margin: "0 6px" }}>
-            <button
-              style={{
-                width: isMobile ? "26px" : "40px",
-                height: isMobile ? "26px" : "40px",
-                borderRadius: "50%",
-                border: "none",
-                background: "#83d390",
-                color: "#fff",
-                opacity: dot.props.className.includes("slick-active") ? 1 : 0.5,
-              }}
-            >
-              {i + 1}
-            </button>
-          </li>
-        ))}
-      </ul>
-    ),
+    arrows: !isMobile,
+    beforeChange: (_, next) => setActiveIndex(next),
+    afterChange: (current) => {
+      setZoomedIndex(current);
+      setTimeout(() => setZoomedIndex(null), 2000); // reset zoom after 2 sec
+    },
   };
 
-  const sideSettings = {
-    slidesToShow: isMobile ? 1 : 3,
-    centerMode: !isMobile,
-    focusOnSelect: true,
-    infinite: true,
-    arrows: false,
-    asNavFor: nav1,
-    ref: slider2,
+  const getCirclePosition = (idx) => {
+    const radius = isMobile ? 80 : 140;
+    const anglePer = (360 / trendsSlides.length) * idx;
+    const rad = ((anglePer + angle) * Math.PI) / 180;
+    const x = radius * Math.cos(rad);
+    const y = radius * Math.sin(rad);
+    return { x, y };
   };
 
   return (
     <section
       style={{
-        backgroundColor: "#3a1edaff",
-        padding: isMobile ? "20px 16px 50px" : "30px 20px 80px",
-        maxWidth: "1200px",
-        margin: "auto",
-        borderRadius: "12px",
+        position: "relative",
+        background: "#1d1f73",
+        padding: isMobile ? "80px 10px 50px" : "120px 20px 100px", // increased top padding for back button space
         fontFamily: "Segoe UI, sans-serif",
+        color: "#fff",
+        textAlign: "center",
       }}
     >
-      {/* ✅ BACK BUTTON */}
+      {/* 🔙 BACK BUTTON TOP LEFT */}
       <button
         onClick={() => navigate("/")}
         style={{
-          marginBottom: "20px",
+          position: "absolute",
+          top: isMobile ? "15px" : "20px",
+          left: isMobile ? "15px" : "45px",
           padding: "10px 20px",
           borderRadius: "8px",
           border: "none",
@@ -98,6 +89,7 @@ export default function WebDevTrendsCarousel() {
           backgroundColor: "#22c55e",
           color: "white",
           fontWeight: "bold",
+          zIndex: 1000,
         }}
       >
         ← Back to Services
@@ -105,86 +97,90 @@ export default function WebDevTrendsCarousel() {
 
       <h2
         style={{
-          textAlign: "center",
-          marginBottom: isMobile ? "40px" : "80px",
-          fontSize: isMobile ? "26px" : "42px",
-          color: "white",
+          marginBottom: isMobile ? "50px" : "70px",
+          fontSize: isMobile ? "24px" : "36px",
           fontWeight: "bold",
         }}
       >
-        Core Website Development Trends for Digital Marketing
+        Core Website Development Trends
       </h2>
 
-      {/* MAIN CAROUSEL */}
-      <Slider {...trendsSettings}>
-        {trendsSlides.map(({ title, text }, idx) => (
+      {/* ROTATING CIRCLES */}
+      <div
+        style={{
+          position: "relative",
+          height: isMobile ? "160px" : "240px",
+          marginBottom: isMobile ? "60px" : "110px",
+        }}
+      >
+        {trendsSlides.map((slide, idx) => {
+          const active = idx === activeIndex;
+          const { x, y } = getCirclePosition(idx);
+
+          return (
+            <div
+              key={idx}
+              onClick={() => {
+                sliderMain.current.slickGoTo(idx);
+                setZoomedIndex(idx);
+                setTimeout(() => setZoomedIndex(null), 2000);
+              }}
+              style={{
+                position: "absolute",
+                marginTop: "40px",
+                top: "50%",
+                left: "50%",
+                transform: `translate(-50%, -50%) translate(${x}px, ${-y}px) scale(${active ? 1.25 : 1})`,
+                width: isMobile ? "70px" : "110px",
+                height: isMobile ? "70px" : "110px",
+                borderRadius: "50%",
+                background: circleColors[idx],
+                border: active ? "4px solid #fff" : "2px solid rgba(255,255,255,0.5)",
+                boxShadow: active ? `0 0 25px ${circleColors[idx]}aa` : "none",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: isMobile ? "10px" : "12px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                textAlign: "center",
+              }}
+            >
+              {slide.title}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* MAIN CONTENT BOX */}
+      <Slider ref={sliderMain} {...mainSettings}>
+        {trendsSlides.map((slide, idx) => (
           <div key={idx}>
             <div
               style={{
                 background: "#fff",
-                borderRadius: "20px",
-                padding: isMobile ? "20px" : "40px",
-                minHeight: isMobile ? "auto" : "250px",
                 color: "#1e3a8a",
-                fontSize: isMobile ? "15px" : "18px",
-                lineHeight: "1.7",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                borderRadius: "16px",
+                marginTop: "20px",
+                padding: isMobile ? "15px 15px" : "20px 25px",
+                minHeight: isMobile ? "auto" : "160px",
+                lineHeight: 1.5,
+                textAlign: "center",
+                boxShadow: `0 0 25px ${circleColors[idx]}33`,
+                transition: "transform 2s ease",
+                transform: zoomedIndex === idx ? "scale(1.2)" : "scale(1)",
               }}
             >
-              <div>
-                <h3 style={{ fontSize: isMobile ? "18px" : "24px", marginBottom: "20px" }}>
-                  {title}
-                </h3>
-                <p>{text}</p>
-              </div>
-
-              <div style={{ textAlign: "center", marginTop: "30px" }}>
-                <a
-                  href="/contact"
-                  style={{
-                    padding: "10px 22px",
-                    background: "#0bb413",
-                    color: "#fff",
-                    borderRadius: "8px",
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Contact Us
-                </a>
-              </div>
+              <h3 style={{ fontSize: isMobile ? "16px" : "20px", marginBottom: "10px" }}>
+                {slide.title}
+              </h3>
+              <p style={{ fontSize: isMobile ? "12px" : "14px" }}>{slide.text}</p>
             </div>
           </div>
         ))}
       </Slider>
-
-      {/* SIDE NAV */}
-      <div style={{ marginTop: isMobile ? "50px" : "100px" }}>
-        <Slider {...sideSettings}>
-          {trendsSlides.map(({ title }, idx) => (
-            <div key={idx} style={{ padding: "16px" }}>
-              <div
-                style={{
-                  background: "#4e72e9",
-                  color: "#fff",
-                  borderRadius: "15px",
-                  padding: "20px",
-                  minHeight: isMobile ? "120px" : "200px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                {title}
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
     </section>
   );
 }

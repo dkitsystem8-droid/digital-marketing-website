@@ -7,129 +7,164 @@ export default function Testimonials() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const resize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
+
+  const googleReviewLink =
+    "https://www.google.com/maps/place/Durkkas+Innovations+Pvt.+Ltd";
 
   const testimonials = [
     {
-      name: "Ravi Kumar",
-      title: "Traffic Growth",
-      text: "Our website traffic doubled within just three months.",
+      name: "DHANRAJ S",
+      role: "Local Guide · 159 reviews",
+      rating: 5,
+      text: "It",
+      time: "3 years ago",
     },
     {
-      name: "Anitha Sharma",
-      title: "Professional Service",
-      text: "Very professional, clear strategy and ROI focused team.",
-    },
-    {
-      name: "Suresh",
-      title: "Business Growth",
-      text: "Best digital marketing partner we have worked with.",
-    },
-    {
-      name: "Priya Nair",
-      title: "Great Support",
-      text: "Excellent support and timely campaign execution.",
+      name: "Vel Raj",
+      role: "Local Guide · 3 reviews",
+      rating: 5,
+      text: "Excellent service and great support team.",
+      time: "2 years ago",
     },
   ];
 
-  /* 🔥 MOBILE SLIDER SETTINGS */
   const sliderSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000, // 🔥 2 sec once move
-    pauseOnHover: true,
+    autoplaySpeed: 2000,
     arrows: false,
   };
 
-  const sectionStyle = {
-    padding: "80px 20px",
-    background: "linear-gradient(180deg,#e0f2fe,#ffffff)",
-    textAlign: "center",
-  };
-
-  const gridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: "30px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  };
-
   const cardStyle = {
-    background: "linear-gradient(135deg, #2563eb, #60a5fa)",
-    padding: "30px 25px",
-    borderRadius: "20px",
-    color: "#ffffff",
-    boxShadow: "0 20px 35px rgba(37,99,235,0.35)",
-    margin: "15px",
+    background:
+      "linear-gradient(135deg,#ffffff,#f0f9ff,#ffffff)",
+    backgroundSize: "300% 300%",
+    animation: "cardShine 6s ease infinite",
+    borderRadius: "18px",
+    padding: "25px",
+    boxShadow: "0 25px 55px rgba(37,99,235,0.35)",
+    textAlign: "left",
+    transition: "transform 0.3s ease",
   };
+
+  const Stars = ({ count }) => (
+    <div style={{ color: "#facc15", fontSize: "18px" }}>
+      {"★".repeat(count)}
+    </div>
+  );
 
   const Card = ({ item }) => (
     <div style={cardStyle}>
-      <h3 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "6px" }}>
-        {item.name}
-      </h3>
+      <Stars count={item.rating} />
 
-      <div style={{ color: "#fde047", marginBottom: "10px" }}>⭐⭐⭐⭐⭐</div>
-
-      <p
-        style={{
-          fontWeight: "600",
-          marginBottom: "10px",
-          fontSize: "15px",
-        }}
-      >
-        {item.title}
-      </p>
-
-      <p
-        style={{
-          fontStyle: "italic",
-          lineHeight: "1.6",
-          fontSize: "14px",
-          opacity: 0.95,
-        }}
-      >
+      <p style={{ fontStyle: "italic", margin: "12px 0" }}>
         “{item.text}”
       </p>
+
+      <h4 style={{ margin: 0 }}>{item.name}</h4>
+      <small style={{ color: "#475569" }}>
+        {item.role} • {item.time}
+      </small>
+
+      {/* GOOGLE REVIEWS BUTTON */}
+      <div style={{ marginTop: "18px" }}>
+        <a
+          href={googleReviewLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            padding: "10px 18px",
+            borderRadius: "8px",
+            background:
+              "linear-gradient(90deg,#2563eb,#60a5fa,#2563eb)",
+            backgroundSize: "200% 200%",
+            animation: "shine 3s linear infinite",
+            color: "#ffffff",
+            fontWeight: "600",
+            textDecoration: "none",
+            fontSize: "14px",
+          }}
+        >
+          View Google Reviews →
+        </a>
+      </div>
     </div>
   );
 
   return (
-    <section style={sectionStyle}>
+    <section
+      style={{
+        padding: "80px 20px",
+        textAlign: "center",
+        background:
+          "linear-gradient(120deg,#1e3a8a,#3b82f6,#e0f2fe,#3b82f6,#1e3a8a)",
+        backgroundSize: "400% 400%",
+        animation: "bgShine 10s ease infinite",
+      }}
+    >
+      {/* 🔥 KEYFRAMES */}
+      <style>
+        {`
+          @keyframes bgShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+
+          @keyframes shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+          }
+
+          @keyframes cardShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+        `}
+      </style>
+
       <h2
         style={{
-          fontSize: "36px",
-          marginBottom: "50px",
-          color: "#1e3a8a",
+          fontSize: isMobile ? "26px" : "36px",
+          marginBottom: "40px",
+          color: "#ffffff",
           fontWeight: "bold",
+          textShadow: "0 4px 12px rgba(0,0,0,0.3)",
         }}
       >
         What Our Clients Say
       </h2>
 
-      {/* ✅ DESKTOP → GRID */}
+      {/* DESKTOP GRID */}
       {!isMobile && (
-        <div style={gridStyle}>
-          {testimonials.map((item, i) => (
-            <Card key={i} item={item} />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "30px",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          {testimonials.map((t, i) => (
+            <Card key={i} item={t} />
           ))}
         </div>
       )}
 
-      {/* ✅ MOBILE → CAROUSEL */}
+      {/* MOBILE SLIDER */}
       {isMobile && (
         <Slider {...sliderSettings}>
-          {testimonials.map((item, i) => (
-            <div key={i}>
-              <Card item={item} />
+          {testimonials.map((t, i) => (
+            <div key={i} style={{ padding: "0 10px" }}>
+              <Card item={t} />
             </div>
           ))}
         </Slider>

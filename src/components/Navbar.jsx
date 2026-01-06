@@ -8,30 +8,67 @@ export default function Navbar() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [servicesHover, setServicesHover] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const resize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
+  /* HOME / LOGO */
+  const goHome = () => {
+    setActiveSection("");
+    setMenuOpen(false);
+    setServicesOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
+      }, 350);
+    } else {
+      document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  /* ABOUT / PROCESS */
+  const scrollToSection = (id) => {
+    setActiveSection(id);
+    setMenuOpen(false);
+    setServicesOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 350);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  /* ROUTE */
   const go = (path) => {
     navigate(path);
+    setActiveSection("");
     setMenuOpen(false);
     setServicesOpen(false);
   };
 
-  const scrollToSection = (id) => {
-    const elem = document.getElementById(id);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth" });
-    }
-    setMenuOpen(false);
-    setServicesOpen(false);
-  };
+  const isHomeActive = location.pathname === "/" && activeSection === "";
+  const isSectionActive = (id) => activeSection === id;
 
-  const isActive = (path) => location.pathname === path;
+  const isServicesActive =
+    servicesHover ||
+    location.pathname.startsWith("/seo") ||
+    location.pathname.startsWith("/social-media") ||
+    location.pathname.startsWith("/google-ads") ||
+    location.pathname.startsWith("/web-development") ||
+    location.pathname.startsWith("/content-marketing") ||
+    location.pathname.startsWith("/email-marketing");
 
   return (
     <>
@@ -42,21 +79,25 @@ export default function Navbar() {
           src="/images/logodrukkas.jpg"
           alt="logo"
           style={{ height: 60, cursor: "pointer", marginLeft: 15 }}
-          onClick={() => go("/")}
+          onClick={goHome}
         />
 
-        {/* DESKTOP MENU */}
+        {/* DESKTOP */}
         {!isMobile && (
           <div style={menuDesktop}>
-            <NavItem text="Home" active={isActive("/")} onClick={() => go("/")} />
-            <NavItem text="About" onClick={() => scrollToSection("about")} />
-            <NavItem text="Process" onClick={() => scrollToSection("process")} />
+            <NavItem active={isHomeActive} onClick={goHome}>Home</NavItem>
+            <NavItem active={isSectionActive("about")} onClick={() => scrollToSection("about")}>About</NavItem>
+            <NavItem active={isSectionActive("process")} onClick={() => scrollToSection("process")}>Process</NavItem>
 
-            {/* Services Dropdown */}
+            {/* SERVICES */}
             <div
-              style={navItem}
-              onMouseEnter={() => setServicesOpen(true)}
-              onMouseLeave={() => setServicesOpen(false)}
+              style={{
+                ...navItem,
+                color: isServicesActive ? "#2563eb" : "#000",
+                borderBottom: isServicesActive ? "2px solid #2563eb" : "none",
+              }}
+              onMouseEnter={() => { setServicesHover(true); setServicesOpen(true); }}
+              onMouseLeave={() => { setServicesHover(false); setServicesOpen(false); }}
             >
               Services <FaChevronDown size={12} />
               {servicesOpen && (
@@ -71,15 +112,13 @@ export default function Navbar() {
               )}
             </div>
 
-            <NavItem
-              text="Contact"
-              active={isActive("/contact")}
-              onClick={() => go("/contact")}
-            />
+            <NavItem active={location.pathname === "/contact"} onClick={() => go("/contact")}>
+              Contact
+            </NavItem>
           </div>
         )}
 
-        {/* MOBILE TOGGLE BUTTON */}
+        {/* MOBILE TOGGLE */}
         {isMobile && (
           <div style={toggleBtn} onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <FaTimes /> : <FaBars />}
@@ -92,28 +131,23 @@ export default function Navbar() {
         <div
           style={{
             ...mobileMenu,
-            maxHeight: menuOpen ? "500px" : "0px",
-            overflow: "hidden",
-            transition: "max-height 0.3s ease",
+            maxHeight: menuOpen ? "650px" : "0",
           }}
         >
-          <MobileItem active={isActive("/")} onClick={() => go("/")}>
-            Home
-          </MobileItem>
+          <MobileItem active={isHomeActive} onClick={goHome}>Home</MobileItem>
+          <MobileItem active={isSectionActive("about")} onClick={() => scrollToSection("about")}>About</MobileItem>
+          <MobileItem active={isSectionActive("process")} onClick={() => scrollToSection("process")}>Process</MobileItem>
 
-          <MobileItem onClick={() => scrollToSection("about")}>About</MobileItem>
-
-          <MobileItem onClick={() => scrollToSection("process")}>Process</MobileItem>
-
-          {/* Services Mobile */}
-          <div style={mobileItem} onClick={() => setServicesOpen(!servicesOpen)}>
-            Services{" "}
-            <FaChevronDown
-              style={{
-                transform: servicesOpen ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "0.3s",
-              }}
-            />
+          <div
+            style={{
+              ...mobileItem,
+              background: isServicesActive ? "#2563eb" : "#fff",
+              color: isServicesActive ? "#fff" : "#000",
+              fontWeight: isServicesActive ? 600 : 400,
+            }}
+            onClick={() => setServicesOpen(!servicesOpen)}
+          >
+            Services <FaChevronDown />
           </div>
 
           {servicesOpen && (
@@ -127,20 +161,19 @@ export default function Navbar() {
             </div>
           )}
 
-          <MobileItem active={isActive("/contact")} onClick={() => go("/contact")}>
+          <MobileItem active={location.pathname === "/contact"} onClick={() => go("/contact")}>
             Contact
           </MobileItem>
         </div>
       )}
 
-      {/* SPACE FOR FIXED NAV */}
       <div style={{ height: 80 }} />
     </>
   );
 }
 
-/* ===== COMPONENTS ===== */
-const NavItem = ({ text, onClick, active }) => (
+/* COMPONENTS */
+const NavItem = ({ children, onClick, active }) => (
   <div
     onClick={onClick}
     style={{
@@ -149,37 +182,29 @@ const NavItem = ({ text, onClick, active }) => (
       borderBottom: active ? "2px solid #2563eb" : "none",
     }}
   >
-    {text}
+    {children}
   </div>
 );
 
-const DropItem = ({ children, onClick }) => {
-  const [hover, setHover] = React.useState(false);
-
-  return (
-    <div
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        ...dropItem,
-        backgroundColor: hover ? "#2563eb" : "#fff",
-        color: hover ? "#fff" : "#000",
-        transition: "0.2s ease",
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+const DropItem = ({ children, onClick }) => (
+  <div
+    onClick={onClick}
+    style={dropItem}
+    onMouseEnter={(e) => { e.target.style.background = "#2563eb"; e.target.style.color = "#fff"; }}
+    onMouseLeave={(e) => { e.target.style.background = "#fff"; e.target.style.color = "#000"; }}
+  >
+    {children}
+  </div>
+);
 
 const MobileItem = ({ children, onClick, active }) => (
   <div
     onClick={onClick}
     style={{
       ...mobileItem,
-      background: active ? "#2563eb" : "transparent",
+      background: active ? "#2563eb" : "#fff",
       color: active ? "#fff" : "#000",
+      fontWeight: active ? 600 : 400,
     }}
   >
     {children}
@@ -187,12 +212,10 @@ const MobileItem = ({ children, onClick, active }) => (
 );
 
 const SubItem = ({ children, onClick }) => (
-  <div style={subItem} onClick={onClick}>
-    {children}
-  </div>
+  <div style={subItem} onClick={onClick}>{children}</div>
 );
 
-/* ===== STYLES ===== */
+/* STYLES */
 const navBar = {
   position: "fixed",
   top: 0,
@@ -202,41 +225,24 @@ const navBar = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  padding: "0 20px 10px 2px",
   boxShadow: "0 2px 30px rgba(0,0,0,0.1)",
   zIndex: 999,
 };
 
-const menuDesktop = {
-  display: "flex",
-  gap: 25,
-  marginRight: 60,
-  alignItems: "center",
-};
-
-const navItem = {
-  cursor: "pointer",
-  fontWeight: 500,
-  position: "relative",
-};
+const menuDesktop = { display: "flex", gap: 25, marginRight: 60 };
+const navItem = { cursor: "pointer", fontWeight: 500, position: "relative" };
 
 const dropdown = {
   position: "absolute",
   top: "100%",
   left: 0,
   background: "#fff",
-  boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+  minWidth: 200,
   borderRadius: 6,
-  overflow: "hidden",
-  minWidth: "180px",
-  zIndex: 1000,
+  boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
 };
 
-const dropItem = {
-  padding: "15px 16px",
-  cursor: "pointer",
-  whiteSpace: "nowrap",
-};
+const dropItem = { padding: "14px 16px", cursor: "pointer" };
 
 const toggleBtn = {
   width: 42,
@@ -248,38 +254,29 @@ const toggleBtn = {
   justifyContent: "center",
   borderRadius: 6,
   cursor: "pointer",
-  position: "absolute",
-  right: 50,
-  top: "50%",
-  transform: "translateY(-50%)",
-  zIndex: 1001,
+  marginRight: 20,
 };
 
 const mobileMenu = {
   position: "fixed",
   top: 80,
-  left: 0,
   width: "100%",
   background: "#fff",
-  zIndex: 999,
-  boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
+  overflow: "hidden",
+  transition: "max-height 0.3s ease",
+  zIndex: 998,
 };
 
 const mobileItem = {
   padding: "14px 20px",
   borderBottom: "1px solid #eee",
-  cursor: "pointer",
   display: "flex",
   justifyContent: "space-between",
 };
 
-const mobileSubMenu = {
-  background: "#f1f5f9",
-  paddingLeft: 20,
-};
+const mobileSubMenu = { background: "#f1f5f9" };
 
 const subItem = {
   padding: "12px 20px",
-  cursor: "pointer",
   borderBottom: "1px solid #ddd",
 };

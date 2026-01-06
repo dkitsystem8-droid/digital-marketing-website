@@ -9,6 +9,8 @@ export default function About() {
     lineHeight: "1.6",
     backgroundColor: "#0735b3ff",
     overflowX: "hidden",
+    
+
   };
 
   const sectionStyle = {
@@ -75,7 +77,7 @@ export default function About() {
 
   return (
     <section id="about" style={pageStyle}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px", color: "white" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "30px", color: "white", marginTop: "80px",  }}>
         About Us
       </h2>
 
@@ -124,7 +126,8 @@ export default function About() {
             "We believe that quality digital marketing should be accessible to every business. Our pricing plans are designed to fit startups, small businesses, and growing enterprises without compromising on results.",
             "With transparent pricing, no hidden costs, and flexible packages, you get maximum ROI for every rupee you invest.",
           ],
-          img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c",
+          img: "https://images.unsplash.com/photo-1604594849809-dfedbc827105?auto=format&fit=crop&w=1200&q=80",
+
           reverse: false,
         },
         {
@@ -133,7 +136,7 @@ export default function About() {
             "Our team consists of highly skilled digital marketers, designers, developers, and strategists with years of industry experience.",
             "We stay updated with the latest trends, tools, and algorithms to ensure your brand always stays ahead of the competition.",
           ],
-          img: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",
+          img: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
           reverse: true,
         },
         {
@@ -142,7 +145,9 @@ export default function About() {
             "Every business is unique, and so are our marketing strategies. We analyze your business goals, target audience, and competitors before crafting a tailored digital marketing plan.",
             "This personalized approach ensures higher engagement, better leads, and long-term growth.",
           ],
-          img: "https://images.unsplash.com/photo-1552664730-d307ca884978",
+        img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80"
+,
+
           reverse: false,
         },
         {

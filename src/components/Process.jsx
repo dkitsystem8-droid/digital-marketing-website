@@ -5,11 +5,11 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function OurProcess() {
   const processSteps = [
-    { title: "Business Discovery", desc: "Understanding your business, goals, customers, and competitors.", img: "/images/business.jpg" },
-    { title: "Strategy Planning", desc: "Creating the right marketing strategy based on the insights.", img: "/images/stategy.jpg" },
-    { title: "Execution", desc: "Implementing the planned strategy with content, ads, and social media.", img: "/images/ece.jpg" },
-    { title: "Optimization", desc: "Monitoring results and improving Ads, SEO, and content for better performance.", img: "/images/seo.jpg" },
-    { title: "Growth & Scaling", desc: "Expanding successful strategies for larger impact and new markets.", img: "/images/Growth.jpg" },
+    { title: "Business Discovery", desc: "Understanding your business, goals, customers, and competitors.", img: "/images/business1.jpg" },
+    { title: "Strategy Planning", desc: "Creating the right marketing strategy based on the insights.", img: "/images/plan.jpg" },
+    { title: "Execution", desc: "Implementing the planned strategy with content, ads, and social media.", img: "/images/excution1.jpg" },
+    { title: "Optimization", desc: "Monitoring results and improving Ads, SEO, and content for better performance.", img: "/images/seo3.jpg" },
+    { title: "Growth & Scaling", desc: "Expanding successful strategies for larger impact and new markets.", img: "/images/growth2.jpg" },
   ];
 
   const [isMobile, setIsMobile] = useState(false);

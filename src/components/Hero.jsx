@@ -12,7 +12,8 @@ export default function Hero() {
   }, []);
 
   return (
-    <section style={heroStyle}>
+    // ✅ IMPORTANT FIX HERE
+    <section id="hero" style={heroStyle}>
       <div style={overlayStyle} />
 
       <h1 style={headingStyle(isMobile)}>
@@ -71,7 +72,7 @@ const heroStyle = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  paddingTop: "80px",
+  paddingTop: "80px", // navbar height
 };
 
 const overlayStyle = {
@@ -90,7 +91,7 @@ const headingStyle = (isMobile) => ({
   maxWidth: "900px",
   padding: "0 24px",
   textShadow: "0 0 20px #00f0ff",
-  marginBottom: isMobile ? "1.2rem" : "2rem", // ✅ FIX
+  marginBottom: isMobile ? "1.2rem" : "2rem",
 });
 
 /* -------- Desktop -------- */
@@ -124,8 +125,8 @@ const mobileWrapper = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  gap: "1rem",          // ✅ FIX
-  marginTop: "0.5rem",  // ✅ FIX
+  gap: "1rem",
+  marginTop: "0.5rem",
   paddingBottom: "1.5rem",
   zIndex: 1,
 };
@@ -139,7 +140,7 @@ const circleStyleMobile = {
   alignItems: "center",
   justifyContent: "center",
   padding: "15px",
-  marginBottom: "0.5rem", // ✅ FIX
+  marginBottom: "0.5rem",
   boxShadow: "0 0 30px #00f0ff",
   textAlign: "center",
 };

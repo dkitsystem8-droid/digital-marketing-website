@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// IMAGE AND CONTENT DATA
+/* IMAGE DATA */
 const imageSlides = [
   { img: "/images/ads1.jpg", caption: "Google Ads Campaign" },
   { img: "/images/ads2.jpg", caption: "PPC Ads" },
@@ -14,32 +14,55 @@ const imageSlides = [
   { img: "/images/ads6.jpg", caption: "Email Marketing" },
 ];
 
+/* CONTENT DATA */
 const contentSlides = [
-  { title: "AI and Automation in Google Ads", text: "Artificial intelligence drives modern Google Ads campaigns for smarter targeting and optimization." },
-  { title: "Privacy-First Advertising", text: "With cookie deprecation, first-party data is crucial for effective campaigns." },
-  { title: "Ad Formats & UX", text: "Short-form video and immersive ads dominate engagement across platforms." },
-  { title: "Strategic Optimization", text: "Landing page speed, relevance, and ad structure are critical for ROI." },
+  {
+    title: "AI & Automation",
+    text: "AI-powered Google Ads use Smart Bidding, Performance Max, and predictive analytics to optimize targeting, reduce ad spend, and increase conversions in real time."
+  },
+  {
+    title: "Privacy First",
+    text: "As third-party cookies phase out, Google Ads relies on first-party data, Consent Mode, and AI-driven conversion modeling to deliver compliant and effective advertising."
+  },
+  {
+    title: "Ad Experience",
+    text: "Google Ads now prioritizes user-friendly ad experiences through short-form video, mobile-first creatives, and relevant messaging to boost engagement and Quality Scores."
+  },
+  {
+    title: "Landing Pages",
+    text: "Optimized landing pages with fast load times, mobile-first design, clear CTAs, and relevant messaging increase conversions and ROI from Google Ads campaigns."
+  },
+  {
+    title: "Audience Targeting",
+    text: "Google Ads leverages AI-driven audience segments, first-party data, and remarketing to ensure ads reach the right users, increasing engagement and conversions."
+  },
+  {
+    title: "Campaign Scaling",
+    text: "Using AI, Performance Max, and automated bidding, Google Ads campaigns can be scaled across channels to increase conversions while optimizing spend and ROI."
+  },
 ];
 
 export default function GoogleAdsCarousel() {
   const navigate = useNavigate();
+
+  const sliderImg = useRef(null);
+  const sliderContent = useRef(null);
+
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const slider1 = useRef(null);
-  const slider2 = useRef(null);
-
   useEffect(() => {
-    setNav1(slider1.current);
-    setNav2(slider2.current);
+    setNav1(sliderImg.current);
+    setNav2(sliderContent.current);
 
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const resize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
-  // IMAGE SLIDER SETTINGS
+  /* IMAGE SLIDER */
   const imageSettings = {
     dots: true,
     infinite: true,
@@ -48,33 +71,33 @@ export default function GoogleAdsCarousel() {
     autoplay: true,
     arrows: !isMobile,
     asNavFor: nav2,
-    ref: slider1,
+    beforeChange: (_, next) => setActiveIndex(next),
   };
 
-  // CONTENT SLIDER SETTINGS
+  /* CONTENT SLIDER */
   const contentSettings = {
     dots: true,
     infinite: true,
-    speed: 700,
+    speed: 600,
     slidesToShow: 1,
-    arrows: !isMobile,
     fade: true,
+    arrows: !isMobile,
     asNavFor: nav1,
-    ref: slider2,
+    beforeChange: (_, next) => setActiveIndex(next),
     appendDots: dots => (
       <ul style={{ display: "flex", justifyContent: "center", marginTop: "20px", padding: 0 }}>
         {dots.map((dot, i) => (
           <li key={i} style={{ listStyle: "none", margin: "0 6px" }}>
             <button
+              onClick={() => sliderContent.current.slickGoTo(i)}
               style={{
-                width: isMobile ? "32px" : "50px",
-                height: isMobile ? "32px" : "50px",
+                width: "36px",
+                height: "36px",
                 borderRadius: "50%",
                 border: "none",
-                background: "#1e40af",
+                background: i === activeIndex ? "#2563eb" : "#93c5fd",
                 color: "#fff",
                 fontWeight: "bold",
-                opacity: dot.props.className.includes("slick-active") ? 1 : 0.5,
                 cursor: "pointer",
               }}
             >
@@ -87,114 +110,91 @@ export default function GoogleAdsCarousel() {
   };
 
   return (
-    <section
-      style={{
-        background: "rgba(1, 15, 216, 1)",
-        padding: isMobile ? "40px 10px 40px" : "30px 10px 50px",
-        fontFamily: "Segoe UI, sans-serif",
-        minHeight: "100vh",
-      }}
-    >
+    <section style={{ background: "#010fd8", padding: "40px 10px", minHeight: "100vh" }}>
+      
       {/* BACK BUTTON */}
-      <div style={{ textAlign: "left", marginBottom: "20px" }}>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            marginBottom: "20px",
-            padding: "10px 24px",
-            background: "transparent",
-            color: "white",
-            border: "2px solid white",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "14px",
-             backgroundColor: "#22c55e",
-          }}
-        >
-          ← Back to Services
-        </button>
-      </div>
-
-      {/* HEADING */}
-      <h2
+      <button
+        onClick={() => navigate("/")}
         style={{
-          textAlign: "center",
-          marginBottom: "60px",
-          fontSize: isMobile ? "28px" : "48px",
-          fontWeight: "bold",
+          marginBottom: "30px",
+          padding: "10px 22px",
+          background: "#22c55e",
+          color: "#fff",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
         }}
       >
-        <span style={{ color: "#4285F4" }}>G</span>
-        <span style={{ color: "#EA4335" }}>o</span>
-        <span style={{ color: "#FBBC05" }}>o</span>
-        <span style={{ color: "#4285F4" }}>g</span>
-        <span style={{ color: "#34A853" }}>l</span>
-        <span style={{ color: "#EA4335" }}>e</span>
-        <span style={{ color: "#4285F4" }}> Ads</span>
+        ← Back to Services
+      </button>
+
+      {/* HEADING */}
+      <h2 style={{ textAlign: "center", color: "white", fontSize: isMobile ? "28px" : "48px", marginBottom: "50px" }}>
+        Google Ads
       </h2>
 
       {/* IMAGE SLIDER */}
-      <Slider {...imageSettings}>
+      <Slider ref={sliderImg} {...imageSettings}>
         {imageSlides.map((s, i) => (
-          <div key={i} style={{ padding: "10px" }}>
+          <div key={i} style={{ padding: "10px", position: "relative" }}>
             <div
               style={{
-                background: "#fff",
                 borderRadius: "20px",
-                padding: "20px",
-                textAlign: "center",
-                minHeight: isMobile ? "200px" : "250px",
+                overflow: "hidden",
+                border: i === activeIndex ? "3px solid #2563eb" : "3px solid transparent",
+                position: "relative",
               }}
             >
               <img
                 src={s.img}
                 alt={s.caption}
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: isMobile ? "120px" : "150px",
-                  objectFit: "contain",
-                  marginBottom: "15px",
+                  width: "100%",
+                  height: isMobile ? "140px" : "180px",
+                  objectFit: "cover",
+                  filter: "blur(2px) brightness(0.7)",
                 }}
               />
-              <strong>{s.caption}</strong>
+              {/* CAPTION */}
+              <div style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: isMobile ? "14px" : "18px",
+                textAlign: "center",
+                textShadow: "0 0 8px rgba(0,0,0,0.7)",
+              }}>
+                {s.caption}
+              </div>
             </div>
           </div>
         ))}
       </Slider>
 
-      {/* CONTENT SLIDER */}
+      {/* CONTENT BOX */}
       <div
         style={{
           marginTop: "40px",
           background: "#fff",
           borderRadius: "20px",
           padding: isMobile ? "20px" : "40px",
-          minHeight: isMobile ? "auto" : "320px",
+          border: "4px solid #2563eb",
+          boxShadow: "0 0 25px rgba(37,99,235,.6)",
           color: "#1e3a8a",
-          fontSize: isMobile ? "15px" : "18px",
-          lineHeight: "1.7",
         }}
       >
-        <Slider {...contentSettings}>
+        <Slider ref={sliderContent} {...contentSettings}>
           {contentSlides.map((c, i) => (
             <div key={i}>
-              <h3 style={{ marginBottom: "12px" }}>
-                Step {i + 1}: {c.title}
-              </h3>
+              <h3 style={{ marginBottom: "12px" }}>Step {i + 1}: {c.title}</h3>
               <p>{c.text}</p>
             </div>
           ))}
         </Slider>
       </div>
-
-      {/* FLOAT ANIMATION (OPTIONAL) */}
-      <style>{`
-        @keyframes float {
-          0% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-          100% { transform: translateY(0); }
-        }
-      `}</style>
     </section>
   );
 }
