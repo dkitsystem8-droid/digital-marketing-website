@@ -26,17 +26,17 @@ export default function WebDevTrendsCarousel() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [zoomedIndex, setZoomedIndex] = useState(null);
   const sliderMain = useRef(null);
-
   const [angle, setAngle] = useState(0);
 
+  // Handle resize and rotation
   useEffect(() => {
-    const resize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", resize);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
 
     const interval = setInterval(() => setAngle(prev => (prev + 0.5) % 360), 30);
 
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
       clearInterval(interval);
     };
   }, []);
@@ -51,12 +51,12 @@ export default function WebDevTrendsCarousel() {
     beforeChange: (_, next) => setActiveIndex(next),
     afterChange: (current) => {
       setZoomedIndex(current);
-      setTimeout(() => setZoomedIndex(null), 2000); // reset zoom after 2 sec
+      setTimeout(() => setZoomedIndex(null), 2000);
     },
   };
 
   const getCirclePosition = (idx) => {
-    const radius = isMobile ? 80 : 140;
+    const radius = isMobile ? 100 : 160;
     const anglePer = (360 / trendsSlides.length) * idx;
     const rad = ((anglePer + angle) * Math.PI) / 180;
     const x = radius * Math.cos(rad);
@@ -67,39 +67,48 @@ export default function WebDevTrendsCarousel() {
   return (
     <section
       style={{
-        position: "relative",
         background: "#1d1f73",
-        padding: isMobile ? "80px 10px 50px" : "120px 20px 100px", // increased top padding for back button space
+        padding: isMobile ? "60px 10px 50px" : "100px 20px 100px",
         fontFamily: "Segoe UI, sans-serif",
         color: "#fff",
         textAlign: "center",
       }}
     >
-      {/* 🔙 BACK BUTTON TOP LEFT */}
-      <button
-        onClick={() => navigate("/")}
+      {/* BACK BUTTON */}
+      <div
         style={{
-          position: "absolute",
-          top: isMobile ? "15px" : "20px",
-          left: isMobile ? "15px" : "45px",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
-          backgroundColor: "#22c55e",
-          color: "white",
-          fontWeight: "bold",
-          zIndex: 1000,
+          display: "flex",
+          justifyContent: "flex-start",
+          
+          marginBottom: isMobile ? "15px" : "30px",
+          maxWidth: "1200px",
+          marginInline: "auto",
         }}
       >
-        ← Back to Services
-      </button>
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            padding: "10px 22px",
+            borderRadius: "8px",
+            border: "none",
+            cursor: "pointer",
+            backgroundColor: "#22c55e",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: "14px",
+          }}
+        >
+          ← Back to Services
+        </button>
+      </div>
 
+      {/* HEADING */}
       <h2
         style={{
-          marginBottom: isMobile ? "50px" : "70px",
+          marginBottom: isMobile ? "30px" : "50px",
           fontSize: isMobile ? "24px" : "36px",
           fontWeight: "bold",
+          lineHeight: 1.2,
         }}
       >
         Core Website Development Trends
@@ -109,8 +118,9 @@ export default function WebDevTrendsCarousel() {
       <div
         style={{
           position: "relative",
-          height: isMobile ? "160px" : "240px",
-          marginBottom: isMobile ? "60px" : "110px",
+          height: isMobile ? "140px" : "200px",
+          marginBottom: isMobile ? "0px" : "80px",
+           marginBottom: "90px",
         }}
       >
         {trendsSlides.map((slide, idx) => {
@@ -127,16 +137,16 @@ export default function WebDevTrendsCarousel() {
               }}
               style={{
                 position: "absolute",
-                marginTop: "40px",
                 top: "50%",
                 left: "50%",
                 transform: `translate(-50%, -50%) translate(${x}px, ${-y}px) scale(${active ? 1.25 : 1})`,
-                width: isMobile ? "70px" : "110px",
-                height: isMobile ? "70px" : "110px",
+                width: isMobile ? "70px" : "100px",
+                height: isMobile ? "70px" : "100px",
                 borderRadius: "50%",
+                marginTop: "80px",
                 background: circleColors[idx],
                 border: active ? "4px solid #fff" : "2px solid rgba(255,255,255,0.5)",
-                boxShadow: active ? `0 0 25px ${circleColors[idx]}aa` : "none",
+                boxShadow: active ? `0 0 20px ${circleColors[idx]}aa` : "none",
                 color: "#fff",
                 display: "flex",
                 alignItems: "center",
@@ -163,7 +173,7 @@ export default function WebDevTrendsCarousel() {
                 background: "#fff",
                 color: "#1e3a8a",
                 borderRadius: "16px",
-                marginTop: "20px",
+                marginTop: "80px",
                 padding: isMobile ? "15px 15px" : "20px 25px",
                 minHeight: isMobile ? "auto" : "160px",
                 lineHeight: 1.5,
