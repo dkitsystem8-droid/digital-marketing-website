@@ -98,7 +98,7 @@ export default function WebDevTrendsBoxCarousel() {
                     padding: "30px",
                     height: "150px",
                     borderRadius: "18px",
-                    background: isActive ? "#56e1ebff" : "#ffffff",
+                    background: isActive ? "#e6238ee0" : "#ffffff",
                     color: isActive ? "#fff" : "#1e3a8a",
                     display: "flex",
                     alignItems: "center",

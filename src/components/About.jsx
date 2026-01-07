@@ -129,7 +129,7 @@ export default function About() {
       {[
         {
           title: "Who We Are",
-          img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+          img: "/images/about1.jpg",
           content: [
             "As an ISO 9001:2015 Certified company, Durkkas InfoTech is more than just a digital service provider — we are your extended creative and technical workforce.",
             "We bring digital ideas to life through professional website development, e-commerce solutions, redesign, maintenance, and result-driven digital marketing services.",
@@ -139,7 +139,7 @@ export default function About() {
         },
         {
           title: "Our Approach",
-          img: "https://images.unsplash.com/photo-1552664730-d307ca884978",
+           img: "/images/about3.jpg",
           content: [
             "We balance design, strategy, and execution to deliver meaningful digital experiences.",
             "From the first pixel of your website to the voice of your social media marketing, every touchpoint is crafted with purpose.",
@@ -149,7 +149,7 @@ export default function About() {
         },
         {
           title: "Our Mission",
-          img: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",
+           img: "/images/about4.jpg",
           content: [
             "Our mission is to deliver powerful digital solutions that help businesses succeed online.",
             "From responsive websites to creative content and performance-driven digital marketing, everything is customized.",
@@ -159,7 +159,7 @@ export default function About() {
         },
         {
           title: "Our Vision",
-          img: "https://images.unsplash.com/photo-1556761175-4b46a572b786",
+          img: "/images/about7.jpg",
           content: [
             "We envision a digital world where every business has a bold online identity.",
             "Through smart design and impactful marketing, we bridge creativity and technology.",
