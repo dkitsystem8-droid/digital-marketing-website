@@ -34,24 +34,8 @@ export default function EmailMarketing() {
         Email Marketing Trends & Services
       </h2>
       
-       {/* ✅ Back Button */}
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          marginBottom: "20px",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
-          backgroundColor: "#22c55e",
-          color: "white",
-          fontWeight: "bold",
-        }}
-      >
-        ← Back to Services
-      </button>
 
-      {/* Main Grid */}
+ {/* Main Grid */}
       <div className="email-grid" style={{
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",

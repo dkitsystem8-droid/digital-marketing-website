@@ -4,175 +4,134 @@ import { useNavigate } from "react-router-dom";
 export default function Hero() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [currentScreenshot, setCurrentScreenshot] = useState(0);
+  const [hoverBtn, setHoverBtn] = useState(false);
 
   useEffect(() => {
-    const resize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const screenshots = [
+    "/images/digital2.jpg",
+    "/images/socialmedia.jpg",
+    "/images/social3.jpg",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentScreenshot((prev) => (prev + 1) % screenshots.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  /* ================= STYLES ================= */
+
+  const heroSection = {
+    width: "100%",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: isMobile ? "column" : "row",
+    padding: isMobile ? "30px 18px" : "80px 70px",
+    backgroundColor: "#0b1c4d",
+    color: "#fff",
+    alignItems: "center",
+    justifyContent: "space-between",
+    boxSizing: "border-box",
+    gap: isMobile ? "40px" : "60px",
+  };
+
+  const leftSide = {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: isMobile ? "center" : "flex-start",
+    textAlign: isMobile ? "center" : "left",
+  };
+
+  const subHeading = {
+    fontSize: isMobile ? "0.9rem" : "1.4rem",
+    marginBottom: "16px",
+    fontWeight: 600,
+    color: "#00f0ff",
+    letterSpacing: "0.8px",
+  };
+
+  const heading = {
+    fontSize: isMobile ? "2rem" : "3.8rem",
+    fontWeight: 900,
+    lineHeight: "1.15",
+    marginBottom: "22px",
+    maxWidth: "620px",
+  };
+
+  const description = {
+    fontSize: "1rem",
+    lineHeight: "1.75",
+    color: "#ccefff",
+    maxWidth: "520px",
+    marginBottom: "38px",
+    padding: isMobile ? "0 10px" : "0",
+    boxSizing: "border-box",
+  };
+
+  const button = {
+    padding: isMobile ? "15px 38px" : "18px 44px",
+    borderRadius: "60px",
+    border: "none",
+    background: "linear-gradient(45deg, #005eff, #00f0ff)",
+    color: "#fff",
+    fontSize: "1.05rem",
+    fontWeight: 700,
+    cursor: "pointer",
+    boxShadow: hoverBtn
+      ? "0 0 40px #00f0ff"
+      : "0 0 24px #00f0ff",
+    transform: hoverBtn ? "scale(1.1)" : "scale(1)",
+    transition: "all 0.35s ease",
+  };
+
+  const rightSide = {
+    flex: 1,
+    width: "100%",
+    maxWidth: "620px",
+    height: isMobile ? "250px" : "380px",
+    borderRadius: "18px",
+    backgroundImage: `url(${screenshots[currentScreenshot]})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+  };
+
+  /* ================= JSX ================= */
+
   return (
-    // ✅ IMPORTANT FIX HERE
-    <section id="hero" style={heroStyle}>
-      <div style={overlayStyle} />
+     <section id="hero" style={heroSection}>
+      {/* LEFT CONTENT */}
+      <div style={leftSide}>
+        <div style={subHeading}>PREMIUM WEB DESIGN AGENCY</div>
 
-      <h1 style={headingStyle(isMobile)}>
-        Grow Your Business with Cutting-Edge Digital Marketing Solutions
-      </h1>
+        <h1 style={heading}>WE GROW BRANDS ONLINE</h1>
 
-      {!isMobile && (
-        <div style={desktopWrapper}>
-          <div style={circleStyle}>
-            <p style={circleTextStyle}>
-              We help startups and enterprises increase visibility, attract
-              high-quality leads, and drive sales.
-            </p>
-          </div>
+        <p style={description}>
+          Custom Websites, Branding & Digital Marketing to elevate your business
+          and create a strong online presence that converts visitors into
+          customers.
+        </p>
 
-          <button
-            style={buttonStyleDesktop}
-            onClick={() => navigate("/contact")}
-          >
-            Get Your Free Consultation
-          </button>
-        </div>
-      )}
+        <button
+          style={button}
+          onMouseEnter={() => setHoverBtn(true)}
+          onMouseLeave={() => setHoverBtn(false)}
+          onClick={() => navigate("/contact")}
+        >
+          REQUEST A QUOTE →
+        </button>
+      </div>
 
-      {isMobile && (
-        <div style={mobileWrapper}>
-          <div style={circleStyleMobile}>
-            <p style={circleTextStyle}>
-              We help startups and enterprises increase visibility, attract
-              high-quality leads, and drive sales.
-            </p>
-          </div>
-
-          <button
-            style={buttonStyleMobile}
-            onClick={() => navigate("/contact")}
-          >
-            Get Your Free Consultation
-          </button>
-        </div>
-      )}
+      {/* RIGHT IMAGE */}
+      <div style={rightSide}></div>
     </section>
   );
 }
-
-/* ================= STYLES ================= */
-
-const heroStyle = {
-  position: "relative",
-  width: "100%",
-  minHeight: "100vh",
-  overflowX: "hidden",
-  backgroundImage: "url('/images/hero.jpg')",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  paddingTop: "80px", // navbar height
-};
-
-const overlayStyle = {
-  position: "absolute",
-  inset: 0,
-  background: "rgba(0,0,50,0.35)",
-  zIndex: 0,
-};
-
-const headingStyle = (isMobile) => ({
-  zIndex: 1,
-  color: "#fff",
-  textAlign: "center",
-  fontWeight: 900,
-  fontSize: isMobile ? "1.8rem" : "3rem",
-  maxWidth: "900px",
-  padding: "0 24px",
-  textShadow: "0 0 20px #00f0ff",
-  marginBottom: isMobile ? "1.2rem" : "2rem",
-});
-
-/* -------- Desktop -------- */
-
-const desktopWrapper = {
-  width: "100%",
-  maxWidth: "1200px",
-  padding: "0 20px",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-end",
-  zIndex: 1,
-};
-
-const circleStyle = {
-  width: "260px",
-  height: "260px",
-  borderRadius: "50%",
-  background: "rgba(0,240,255,0.25)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "20px",
-  boxShadow: "0 0 30px #00f0ff",
-  textAlign: "center",
-};
-
-/* -------- Mobile -------- */
-
-const mobileWrapper = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "1rem",
-  marginTop: "0.5rem",
-  paddingBottom: "1.5rem",
-  zIndex: 1,
-};
-
-const circleStyleMobile = {
-  width: "200px",
-  height: "200px",
-  borderRadius: "50%",
-  background: "rgba(0,240,255,0.25)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "15px",
-  marginBottom: "0.5rem",
-  boxShadow: "0 0 30px #00f0ff",
-  textAlign: "center",
-};
-
-const circleTextStyle = {
-  color: "#fff",
-  fontSize: "0.95rem",
-  lineHeight: 1.4,
-};
-
-/* -------- Buttons -------- */
-
-const buttonStyleDesktop = {
-  padding: "16px 40px",
-  borderRadius: "50px",
-  border: "none",
-  fontSize: "1rem",
-  fontWeight: 600,
-  cursor: "pointer",
-  color: "#fff",
-  background: "linear-gradient(45deg,#005eff,#00f0ff)",
-  boxShadow: "0 0 20px #00f0ff",
-};
-
-const buttonStyleMobile = {
-  padding: "14px 32px",
-  borderRadius: "50px",
-  border: "none",
-  fontSize: "0.95rem",
-  fontWeight: 600,
-  cursor: "pointer",
-  color: "#fff",
-  background: "linear-gradient(45deg,#005eff,#00f0ff)",
-  boxShadow: "0 0 20px #00f0ff",
-};

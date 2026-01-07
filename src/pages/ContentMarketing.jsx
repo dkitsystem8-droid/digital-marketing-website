@@ -33,23 +33,7 @@ export default function ContentMarketing() {
         borderRadius: "20px",
       }}
     >
-      {/* ✅ Back Button */}
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          marginBottom: "20px",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
-          backgroundColor: "#22c55e",
-          color: "white",
-          fontWeight: "bold",
-        }}
-      >
-        ← Back to Services
-      </button>
-
+      
       {/* Heading */}
       <h1
         style={{
@@ -67,7 +51,9 @@ export default function ContentMarketing() {
       {/* Hero image */}
       <div style={{ textAlign: "center", marginBottom: "50px" }}>
         <img
-          src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"
+          src="https://cdn-icons-png.flaticon.com/512/4727/4727424.png
+
+"
           alt="Content Marketing"
           style={{
             width: "180px",

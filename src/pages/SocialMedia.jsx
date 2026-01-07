@@ -71,23 +71,7 @@ export default function SocialMedia() {
           }}
         >
           <div>
-            {/* 🔙 BACK BUTTON */}
-            <button
-              onClick={() => navigate("/")}
-              style={{
-          marginBottom: "20px",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
-          backgroundColor: "#22c55e",
-          color: "white",
-          fontWeight: "bold",
-        }}
-            >
-              ← Back to Services
-            </button>
-
+       
             <h1
               style={{
                 color: "white",

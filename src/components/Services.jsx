@@ -51,7 +51,8 @@ export default function Services() {
   ];
 
   return (
-    <section style={{ padding: "80px 20px", background: "#f9fafb" }}>
+    <section id="services" style={{ padding: "80px 20px", background: "#f9fafb" }}>
+
       <h2 style={{ textAlign: "center", marginBottom: "40px", color: "#2563eb" }}>
         Our Services
       </h2>

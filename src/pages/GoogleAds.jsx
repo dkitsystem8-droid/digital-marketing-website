@@ -112,22 +112,7 @@ export default function GoogleAdsCarousel() {
   return (
     <section style={{ background: "#010fd8", padding: "40px 10px", minHeight: "100vh" }}>
       
-      {/* BACK BUTTON */}
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          marginBottom: "30px",
-          padding: "10px 22px",
-          background: "#22c55e",
-          color: "#fff",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        ← Back to Services
-      </button>
-
+      
       {/* HEADING */}
       <h2 style={{ textAlign: "center", color: "white", fontSize: isMobile ? "28px" : "48px", marginBottom: "50px" }}>
         Google Ads

@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const trendsSlides = [
+const slides = [
   { title: "AI-Powered Personalization", text: "Websites use AI to offer hyper-personalized experiences in real-time." },
   { title: "Mobile-First Development", text: "Dedicated mobile layouts with thumb-friendly navigation are essential." },
   { title: "Voice Search Optimization", text: "Optimize content for conversational voice queries." },
@@ -15,182 +15,133 @@ const trendsSlides = [
   { title: "Interactive Elements", text: "Micro-interactions and AR/VR improve engagement." },
 ];
 
-const circleColors = [
-  "#f87171", "#fb923c", "#facc15", "#4ade80", 
-  "#22d3ee", "#60a5fa", "#a78bfa", "#f472b6"
-];
-
-export default function WebDevTrendsCarousel() {
+export default function WebDevTrendsBoxCarousel() {
   const navigate = useNavigate();
+  const sliderRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [zoomedIndex, setZoomedIndex] = useState(null);
-  const sliderMain = useRef(null);
-  const [angle, setAngle] = useState(0);
 
-  // Handle resize and rotation
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-
-    const interval = setInterval(() => setAngle(prev => (prev + 0.5) % 360), 30);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearInterval(interval);
-    };
+    const resize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
-  const mainSettings = {
-    dots: false,
+  const settings = {
     infinite: true,
-    speed: 600,
-    slidesToShow: 1,
-    fade: true,
+    centerMode: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    speed: 700,
+    centerPadding: isMobile ? "0px" : "160px",
+    slidesToShow: isMobile ? 1 : 3,
     arrows: !isMobile,
     beforeChange: (_, next) => setActiveIndex(next),
-    afterChange: (current) => {
-      setZoomedIndex(current);
-      setTimeout(() => setZoomedIndex(null), 2000);
-    },
-  };
-
-  const getCirclePosition = (idx) => {
-    const radius = isMobile ? 100 : 160;
-    const anglePer = (360 / trendsSlides.length) * idx;
-    const rad = ((anglePer + angle) * Math.PI) / 180;
-    const x = radius * Math.cos(rad);
-    const y = radius * Math.sin(rad);
-    return { x, y };
   };
 
   return (
     <section
       style={{
-        background: "#1d1f73",
-        padding: isMobile ? "60px 10px 50px" : "100px 20px 100px",
+        position: "relative",
+        padding: isMobile ? "30px 10px" : "40px 20px", // 🔽 reduced top padding
         fontFamily: "Segoe UI, sans-serif",
         color: "#fff",
-        textAlign: "center",
+        backgroundImage:
+          "linear-gradient(rgba(16,64,177,0.85), rgba(33,80,189,0.9)), url('https://images.unsplash.com/photo-1518770660439-4636190af475')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      {/* BACK BUTTON */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          
-          marginBottom: isMobile ? "15px" : "30px",
-          maxWidth: "1200px",
-          marginInline: "auto",
-        }}
-      >
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            padding: "10px 22px",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer",
-            backgroundColor: "#22c55e",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "14px",
-          }}
-        >
-          ← Back to Services
-        </button>
-      </div>
+     
 
       {/* HEADING */}
       <h2
         style={{
-          marginBottom: isMobile ? "30px" : "50px",
-          fontSize: isMobile ? "24px" : "36px",
-          fontWeight: "bold",
-          lineHeight: 1.2,
+          textAlign: "center",
+          fontSize: isMobile ? "30px" : "44px",
+          marginBottom: "30px", // 🔽 reduced
         }}
       >
         Core Website Development Trends
       </h2>
 
-      {/* ROTATING CIRCLES */}
-      <div
+      {/* INTRO CONTENT */}
+      <p
         style={{
-          position: "relative",
-          height: isMobile ? "140px" : "200px",
-          marginBottom: isMobile ? "0px" : "80px",
-           marginBottom: "90px",
+          maxWidth: "850px",
+          margin: "0 auto 60px",
+          textAlign: "center",
+          fontSize: isMobile ? "13px" : "15px",
+          lineHeight: 1.8,
+          color: "#e0e7ff",
         }}
       >
-        {trendsSlides.map((slide, idx) => {
-          const active = idx === activeIndex;
-          const { x, y } = getCirclePosition(idx);
+        Modern website development is evolving rapidly with new technologies and user expectations.
+        Businesses today require fast, secure, and highly interactive digital experiences to stay competitive.
+        From AI-driven personalization to mobile-first design strategies, trends focus on user convenience and performance.
+        Search behavior is changing with voice assistants, demanding smarter content optimization.
+        Progressive Web Apps and headless architectures are redefining scalability and flexibility.
+        Understanding these trends helps brands build future-ready websites that convert and retain users.
+      </p>
 
-          return (
-            <div
-              key={idx}
-              onClick={() => {
-                sliderMain.current.slickGoTo(idx);
-                setZoomedIndex(idx);
-                setTimeout(() => setZoomedIndex(null), 2000);
-              }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: `translate(-50%, -50%) translate(${x}px, ${-y}px) scale(${active ? 1.25 : 1})`,
-                width: isMobile ? "70px" : "100px",
-                height: isMobile ? "70px" : "100px",
-                borderRadius: "50%",
-                marginTop: "80px",
-                background: circleColors[idx],
-                border: active ? "4px solid #fff" : "2px solid rgba(255,255,255,0.5)",
-                boxShadow: active ? `0 0 20px ${circleColors[idx]}aa` : "none",
-                color: "#fff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: isMobile ? "10px" : "12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-                textAlign: "center",
-              }}
-            >
-              {slide.title}
-            </div>
-          );
-        })}
+      {/* CAROUSEL */}
+      <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
+        <Slider ref={sliderRef} {...settings}>
+          {slides.map((slide, idx) => {
+            const isActive = idx === activeIndex;
+            return (
+              <div key={idx}>
+                <div
+                  onClick={() => sliderRef.current.slickGoTo(idx)}
+                  style={{
+                    margin: "0 18px",
+                    padding: "30px",
+                    height: "150px",
+                    borderRadius: "18px",
+                    background: isActive ? "#56e1ebff" : "#ffffff",
+                    color: isActive ? "#fff" : "#1e3a8a",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    transform: isActive ? "scale(1.3)" : "scale(0.9)",
+                    transition: "all 0.5s ease",
+                    boxShadow: isActive
+                      ? "0 25px 50px rgba(19,172,172,0.45)"
+                      : "0 10px 25px rgba(46,184,104,0.25)",
+                  }}
+                >
+                  <h3 style={{ fontSize: "17px", lineHeight: 1.4 }}>
+                    {slide.title}
+                  </h3>
+                </div>
+              </div>
+            );
+          })}
+        </Slider>
       </div>
 
-      {/* MAIN CONTENT BOX */}
-      <Slider ref={sliderMain} {...mainSettings}>
-        {trendsSlides.map((slide, idx) => (
-          <div key={idx}>
-            <div
-              style={{
-                background: "#fff",
-                color: "#1e3a8a",
-                borderRadius: "16px",
-                marginTop: "80px",
-                padding: isMobile ? "15px 15px" : "20px 25px",
-                minHeight: isMobile ? "auto" : "160px",
-                lineHeight: 1.5,
-                textAlign: "center",
-                boxShadow: `0 0 25px ${circleColors[idx]}33`,
-                transition: "transform 2s ease",
-                transform: zoomedIndex === idx ? "scale(1.2)" : "scale(1)",
-              }}
-            >
-              <h3 style={{ fontSize: isMobile ? "16px" : "20px", marginBottom: "10px" }}>
-                {slide.title}
-              </h3>
-              <p style={{ fontSize: isMobile ? "12px" : "14px" }}>{slide.text}</p>
-            </div>
-          </div>
-        ))}
-      </Slider>
+      {/* CONTENT BOX */}
+      <div
+        style={{
+          maxWidth: "750px",
+          margin: "60px auto 0",
+          background: "#ffffff",
+          color: "#1e3a8a",
+          padding: isMobile ? "36px" : "32px",
+          borderRadius: "20px",
+          textAlign: "center",
+          boxShadow: "0 25px 45px rgba(0,0,0,0.35)",
+        }}
+      >
+        <h3 style={{ marginBottom: "16px" }}>
+          {slides[activeIndex].title}
+        </h3>
+        <p style={{ fontSize: "14px", lineHeight: 1.7 }}>
+          {slides[activeIndex].text}
+        </p>
+      </div>
     </section>
   );
 }
