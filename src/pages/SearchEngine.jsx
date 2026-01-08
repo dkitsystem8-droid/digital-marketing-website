@@ -165,7 +165,7 @@ export default function SEO() {
         }
         .hoverCard:hover{
           transform:translateY(-12px) scale(1.05);
-          background:lightblue;
+          background:lightpink;
         }
 
         .advancedCard{
@@ -199,7 +199,7 @@ export default function SEO() {
         }
 
         .benefitCard{
-          background:lightblue;
+          background:lightgreen;
           padding:25px;
           border-radius:20px;
           transition:0.4s;
